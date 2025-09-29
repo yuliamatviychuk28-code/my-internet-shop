@@ -1,0 +1,106 @@
+<!-- Сайт розроблено студенткою Матвійчук Юлією, група ФЕМП 5-3з -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Інтернет-магазин побутових товарів</title>
+<style>
+:root{--bg:#ececec;--card:#f7efe6;--accent:#7a4b2a;--muted:#6b6b6b;--radius:12px;--shadow:0 6px 18px rgba(0,0,0,0.08);}
+*{box-sizing:border-box} body{font-family:Arial, sans-serif; margin:0; background:var(--bg); color:#222}
+header{background:linear-gradient(180deg,var(--card),#fff); padding:18px 24px; box-shadow: var(--shadow); position:sticky; top:0; z-index:10}
+.container{max-width:1100px; margin:24px auto; padding:0 18px}
+nav{display:flex; gap:10px}
+nav a{padding:8px 12px; text-decoration:none; color:var(--muted); border-radius:8px}
+nav a.active, nav a:hover{color:var(--accent); background:rgba(122,75,42,0.06)}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px}
+.card{background:var(--card); border-radius:var(--radius); padding:12px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px}
+.card img{width:100%; height:150px; object-fit:cover; border-radius:10px}
+.card h3{margin:0; color:var(--accent)}
+.card .price{font-weight:700; margin-top:6px}
+.card .actions{display:flex; gap:8px; margin-top:auto}
+.btn{padding:8px 10px; border-radius:10px; border:0; cursor:pointer}
+.btn.add{background:var(--accent); color:#fff}
+.cart-sum{background:var(--card); padding:12px; border-radius:12px; box-shadow:var(--shadow)}
+footer{margin-top:30px; padding:18px 0; text-align:center; color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>Інтернет-магазин побутових товарів</h1>
+<nav>
+<a href="#home" class="navlink active">Головна</a>
+<a href="#catalog" class="navlink">Каталог</a>
+<a href="#cart" class="navlink">Кошик</a>
+<a href="#contacts" class="navlink">Контакти</a>
+</nav>
+</div>
+</header>
+
+<main class="container">
+<section id="home">
+<h2>Ласкаво просимо!</h2>
+<p>Виконавець: <strong>Матвійчук Юлія</strong>, Група: <strong>ФЕМП 5-3з</strong></p>
+</section>
+
+<section id="catalog">
+<h2>Каталог товарів</h2>
+<div class="grid" id="productsGrid"></div>
+</section>
+
+<section id="cart">
+<h2>Кошик</h2>
+<div class="cart-sum">
+<div>Кількість товарів: <span id="cartCount">0</span></div>
+<div>Сума: <span id="cartTotal">0</span> грн</div>
+</div>
+</section>
+
+<section id="contacts">
+<h2>Контакти</h2>
+<p>Email: shop@example.com</p>
+<p>Телефон: +380 67 123 45 67</p>
+<p>Адреса: Київ</p>
+</section>
+</main>
+
+<footer>
+<p>© Сайт розроблено студенткою <strong>Матвійчук Юлія</strong>, Група: <strong>ФЕМП 5-3з</strong></p>
+</footer>
+
+<script>
+const products=[
+{id:1,name:'Електрочайник Classic 1.7л',category:'kitchen',price:850,img:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=60'},
+{id:2,name:'Праска SteamPro',category:'bedroom',price:1200,img:'https://images.unsplash.com/photo-1616628182606-099d2f59e8c4?auto=format&fit=crop&w=800&q=60'},
+{id:3,name:'Пилосос Compact 2000',category:'living',price:3500,img:'https://images.unsplash.com/photo-1583928378391-9b96e9e17e2f?auto=format&fit=crop&w=800&q=60'},
+{id:4,name:'Фен HairMax',category:'bath',price:600,img:'https://images.unsplash.com/photo-1590080871071-c78c042bd175?auto=format&fit=crop&w=800&q=60'},
+{id:5,name:'Тостер Crispy',category:'kitchen',price:950,img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'}
+];
+const cart={};
+function renderProducts(){
+const grid=document.getElementById('productsGrid');
+grid.innerHTML='';
+products.forEach(p=>{
+const card=document.createElement('div'); card.className='card';
+card.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><div class="price">${p.price} грн</div><div class="actions"><button class="btn add" data-id="${p.id}">Додати в кошик</button></div>`;
+grid.appendChild(card);
+});
+document.querySelectorAll('.btn.add').forEach(b=>{
+b.addEventListener('click',e=>{
+const id=e.target.dataset.id;
+if(cart[id]){cart[id].qty++;} else {cart[id]={...products.find(p=>p.id==id), qty:1};}
+updateCart();
+});
+});
+}
+function updateCart(){
+let total=0,count=0;
+Object.values(cart).forEach(item=>{count+=item.qty; total+=item.qty*item.price;});
+document.getElementById('cartCount').textContent=count;
+document.getElementById('cartTotal').textContent=total;
+}
+renderProducts();
+</script>
+</body>
+</html>
